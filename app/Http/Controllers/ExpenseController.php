@@ -7,11 +7,6 @@ use Illuminate\Http\Request;
 
 class ExpenseController extends Controller
 {
-    public function index()
-    {
-        $expenses = Expense::latest()->get();
-        return view('expenses.index', compact('expenses'));
-    }
 
     public function create()
     {
@@ -56,4 +51,17 @@ class ExpenseController extends Controller
         $expense->delete();
         return redirect()->route('expenses.index')->with('success', 'Expense deleted!');
     }
+
+    public function index(Request $request){
+        $query = Expense::latest();
+
+        if ($request->filled('date')) {
+            $query->whereDate('spent_at', $request->date);
+        }
+
+        $expenses = $query->get();
+
+        return view('expenses.index', compact('expenses'));
+    }
+    
 }

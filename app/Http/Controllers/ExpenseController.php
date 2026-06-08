@@ -4,10 +4,10 @@ namespace App\Http\Controllers;
 
 use App\Models\Expense;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Http;
 
 class ExpenseController extends Controller
 {
-
     public function create()
     {
         return view('expenses.create');
@@ -52,7 +52,8 @@ class ExpenseController extends Controller
         return redirect()->route('expenses.index')->with('success', 'Expense deleted!');
     }
 
-    public function index(Request $request){
+    public function index(Request $request)
+    {
         $query = Expense::latest();
 
         if ($request->filled('date')) {
@@ -64,9 +65,19 @@ class ExpenseController extends Controller
         }
 
         $total = $query->sum('amount');
-
         $expenses = $query->get();
 
-        return view('expenses.index', compact('expenses', 'total'));}
-    
+        $currency = $request->get('currency', 'JPY');
+        $rate = 1;
+
+        if ($currency !== 'JPY') {
+            $response = Http::get("https://api.frankfurter.app/latest", [
+                'from' => 'JPY',
+                'to' => $currency,
+            ]);
+            $rate = $response->json('rates')[$currency];
+        }
+
+        return view('expenses.index', compact('expenses', 'total', 'currency', 'rate'));
+    }
 }

@@ -20,12 +20,19 @@
         <option value="Bills" {{ request('category') == 'Bills' ? 'selected' : '' }}>Bills</option>
         <option value="Other" {{ request('category') == 'Other' ? 'selected' : '' }}>Other</option>
     </select>
+    <select name="currency" class="form-control w-auto">
+        <option value="JPY" {{ request('currency', 'JPY') == 'JPY' ? 'selected' : '' }}>¥ JPY</option>
+        <option value="USD" {{ request('currency') == 'USD' ? 'selected' : '' }}>$ USD</option>
+        <option value="EUR" {{ request('currency') == 'EUR' ? 'selected' : '' }}>€ EUR</option>
+        <option value="GBP" {{ request('currency') == 'GBP' ? 'selected' : '' }}>£ GBP</option>
+    </select>
+
     <button type="submit" class="btn btn-primary">Filter</button>
     <a href="{{ route('expenses.index') }}" class="btn btn-secondary">Clear</a>
 </form>
 
 <div class="alert alert-info mb-4">
-    <strong>Total:</strong> ¥{{ number_format($total, 2) }}
+    <strong>Total:</strong> {{ $currency }} {{ number_format($total * $rate, 2) }}
 </div>
 
 
@@ -43,7 +50,7 @@
             @forelse($expenses as $expense)
             <tr>
                 <td>{{ $expense->title }}</td>
-                <td>¥{{ number_format($expense->amount, 2) }}</td>
+                <td>{{ $currency }} {{ number_format($expense->amount * $rate, 2) }}</td>
                 <td>{{ $expense->category }}</td>
                 <td>{{ $expense->spent_at }}</td>
                 <td>

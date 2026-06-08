@@ -24,6 +24,11 @@
     <a href="{{ route('expenses.index') }}" class="btn btn-secondary">Clear</a>
 </form>
 
+<div class="alert alert-info mb-4">
+    <strong>Total:</strong> ¥{{ number_format($total, 2) }}
+</div>
+
+
     @if(session('success'))
         <div class="alert alert-success">{{ session('success') }}</div>
     @endif

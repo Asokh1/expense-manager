@@ -59,9 +59,14 @@ class ExpenseController extends Controller
             $query->whereDate('spent_at', $request->date);
         }
 
+        if ($request->filled('category')) {
+            $query->where('category', $request->category);
+        }
+
+        $total = $query->sum('amount');
+
         $expenses = $query->get();
 
-        return view('expenses.index', compact('expenses'));
-    }
+        return view('expenses.index', compact('expenses', 'total'));}
     
 }

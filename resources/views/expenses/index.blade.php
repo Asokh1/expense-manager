@@ -10,18 +10,19 @@
         <a href="{{ route('expenses.create') }}" class="btn btn-primary">+ Add Expense</a>
     </div>
 
-    <div class="d-flex justify-content-between align-items-center mb-4">
-        <h1>Date Breakdown</h1>
-    </div>
-
-    <div class="d-flex justify-content-between align-items-center mb-4">
-        <h5>Date Breakdown</h5>
-        <form method="GET" action="{{ route('expenses.index') }}" class="d-flex gap-2">
-            <input type="date" name="date" class="form-control w-auto" value="{{ request('date') }}">
-            <button type="submit" class="btn btn-primary">Filter</button>
-            <a href="{{ route('expenses.index') }}" class="btn btn-secondary">Clear</a>
-        </form>
-    </div>
+    <form method="GET" action="{{ route('expenses.index') }}" class="d-flex gap-2 mb-4 align-items-center">
+    <input type="date" name="date" class="form-control w-auto" value="{{ request('date') }}">
+    <select name="category" class="form-control w-auto">
+        <option value="">All Categories</option>
+        <option value="Food" {{ request('category') == 'Food' ? 'selected' : '' }}>Food</option>
+        <option value="Transport" {{ request('category') == 'Transport' ? 'selected' : '' }}>Transport</option>
+        <option value="Shopping" {{ request('category') == 'Shopping' ? 'selected' : '' }}>Shopping</option>
+        <option value="Bills" {{ request('category') == 'Bills' ? 'selected' : '' }}>Bills</option>
+        <option value="Other" {{ request('category') == 'Other' ? 'selected' : '' }}>Other</option>
+    </select>
+    <button type="submit" class="btn btn-primary">Filter</button>
+    <a href="{{ route('expenses.index') }}" class="btn btn-secondary">Clear</a>
+</form>
 
     @if(session('success'))
         <div class="alert alert-success">{{ session('success') }}</div>
